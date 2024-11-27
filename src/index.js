@@ -3,11 +3,20 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from 'react-router-dom'; // Импорт BrowserRouter для маршрутизации
+import { SnackbarProvider } from './components/SnackbarProvider'; // Для Snackbar уведомлений
+import { AuthProvider } from './context/AuthContext'; // Ваш провайдер авторизации
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <SnackbarProvider maxSnack={3}>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </SnackbarProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
