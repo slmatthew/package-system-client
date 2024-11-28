@@ -1,48 +1,171 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import * as React from 'react';
+
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-const Navbar = () => {
+function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
 
-  return (
-    <nav style={{ padding: '1rem', background: '#f0f0f0', marginBottom: '1rem' }}>
-      <ul style={{ listStyle: 'none', display: 'flex', gap: '1rem', margin: 0 }}>
-        <li>
-          <Link to="/">Главная</Link>
-        </li>
-        {user?.role === 'admin' && (
-          <>
-            <li>
-              <Link to="/users">Пользователи</Link>
-            </li>
-            <li>
-              <Link to="/facilities">Склады</Link>
-            </li>
-          </>
-        )}
-        {(user?.role === 'admin' || user?.role === 'sorter') && (
-          <li>
-            <Link to="/status-history">Логистика</Link>
-          </li>
-        )}
-        <li>
-          <Link to="/packages">Мои посылки</Link>
-        </li>
-        <li>
-          <button onClick={handleLogout} style={{ cursor: 'pointer' }}>
-            Выйти
-          </button>
-        </li>
-      </ul>
-    </nav>
-  );
-};
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
 
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const pages = [['/', 'Главная'], ['/packages', 'Мои посылки']];
+
+  if(user?.role === 'admin') pages.push(['/users', 'Пользователи'], ['/facilities', 'Склады']);
+  if(user?.role === 'admin' || user?.role === 'soter') pages.push(['/status-history', 'Логистика']);
+  
+  return (
+    <AppBar position="static">
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <LocalShippingIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="#app-bar-with-responsive-menu"
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            СТСД
+          </Typography>
+
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{ display: { xs: 'block', md: 'none' } }}
+            >
+              {pages.map((page, i) => (
+                <MenuItem key={i} onClick={() => navigate(page[0])}>
+                  <Typography sx={{ textAlign: 'center' }}>{page[1]}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+          <LocalShippingIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href="#app-bar-with-responsive-menu"
+            sx={{
+              mr: 2,
+              display: { xs: 'flex', md: 'none' },
+              flexGrow: 1,
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            СТСД
+          </Typography>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            {pages.map((page, i) => (
+              <Button
+                key={i}
+                onClick={() => navigate(page[0])}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                {page[1]}
+              </Button>
+            ))}
+          </Box>
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt={user.username} />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: '45px' }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              <MenuItem onClick={handleLogout}>
+                <Typography sx={{ textAlign: 'center' }}>Выйти</Typography>
+              </MenuItem>
+            </Menu>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
+  );
+}
 export default Navbar;
