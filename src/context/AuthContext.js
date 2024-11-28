@@ -29,9 +29,15 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = async (credentials) => {
-    const response = await api.post('/users/login', credentials);
-    localStorage.setItem('token', response.data.token);
-    setUser(response.data.user);
+    try {
+      const response = await api.post('/users/login', credentials);
+      localStorage.setItem('token', response.data.token);
+
+      const userResponse = await api.get('/users/me');
+      setUser(userResponse.data);
+    } catch(err) {
+      console.error(err);
+    }
   };
 
   const logout = () => {

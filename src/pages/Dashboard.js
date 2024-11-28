@@ -6,7 +6,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <h1>Welcome, {user?.name || 'User'}</h1>
+      <h1>Привет, {user?.first_name || 'User'}</h1>
       <p>Here’s an overview of your activities.</p>
     </div>
   );
