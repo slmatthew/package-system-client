@@ -6,6 +6,8 @@ export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null); // Хранение информации о пользователе
+  const [pkgTypes, setPkgTypes] = useState([]);
+  const [pkgStatuses, setPkgStatuses] = useState([]);
   const [loading, setLoading] = useState(true); // Для показа загрузки
   const navigate = useNavigate();
 
@@ -17,6 +19,12 @@ export function AuthProvider({ children }) {
         try {
           const response = await api.get('/users/me');
           setUser(response.data);
+
+          const types = await api.get('/package-types');
+          setPkgTypes(types.data);
+
+          const statuses = await api.get('/package-statuses');
+          setPkgStatuses(statuses.data);
         } catch (error) {
           localStorage.removeItem('token');
           setUser(null);
@@ -47,7 +55,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, loading, pkgStatuses, pkgTypes }}>
       {children}
     </AuthContext.Provider>
   );
