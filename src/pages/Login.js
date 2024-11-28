@@ -1,11 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useSnackbar } from '../components/SnackbarProvider';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Container, Typography } from '@mui/material';
 
 function Login() {
-  const { login } = useContext(AuthContext);
+  const { login, user } = useContext(AuthContext);
   const showSnackbar = useSnackbar();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -14,27 +14,35 @@ function Login() {
   const handleSubmit = async () => {
     try {
       await login({ username, password });
-      showSnackbar('Login successful!', 'success');
-      navigate('/packages');
+      showSnackbar('Вы вошли в аккаунт', 'success');
+      navigate('/');
     } catch (err) {
-      showSnackbar('Login failed. Please check your credentials.', 'error');
+      showSnackbar('Проверьте указанные данные', 'error');
     }
   };
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      if(user) return navigate('/');
+    };
+
+    checkAuth();
+  }, [user, navigate]);
 
   return (
     <Container maxWidth="sm">
       <Typography variant="h4" gutterBottom>
-        Login
+        Вход в аккаунт
       </Typography>
       <TextField
-        label="Username"
+        label="Имя пользователя"
         fullWidth
         margin="normal"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
       />
       <TextField
-        label="Password"
+        label="Пароль"
         type="password"
         fullWidth
         margin="normal"
@@ -42,7 +50,14 @@ function Login() {
         onChange={(e) => setPassword(e.target.value)}
       />
       <Button variant="contained" fullWidth onClick={handleSubmit}>
-        Login
+        Войти
+      </Button>
+      <Button
+        variant="text"
+        onClick={() => navigate('/register')}
+        fullWidth
+      >
+        Зарегистрироваться
       </Button>
     </Container>
   );

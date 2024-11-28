@@ -35,7 +35,7 @@ function Packages() {
   return (
     <Container maxWidth="md">
       <Typography variant="h4" gutterBottom>
-        My Packages
+        Мои посылки
       </Typography>
       <List>
         {packages.map((pkg) => (
@@ -48,7 +48,7 @@ function Packages() {
         ))}
       </List>
       <Button variant="contained" onClick={fetchPackages}>
-        Refresh
+        Обновить
       </Button>
     </Container>
   );
