@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useSnackbar } from '../components/SnackbarProvider';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { TextField, Button, Container, Typography } from '@mui/material';
 
 function Login() {
@@ -10,12 +10,15 @@ function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || '/';
 
   const handleSubmit = async () => {
     try {
       await login({ username, password });
       showSnackbar('Вы вошли в аккаунт', 'success');
-      navigate('/');
+      navigate(from);
     } catch (err) {
       showSnackbar('Проверьте указанные данные', 'error');
     }
@@ -23,11 +26,11 @@ function Login() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      if(user) return navigate('/');
+      if(user) return navigate(from);
     };
 
     checkAuth();
-  }, [user, navigate]);
+  }, [user, navigate, from]);
 
   return (
     <Container maxWidth="sm">

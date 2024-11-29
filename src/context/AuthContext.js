@@ -11,6 +11,18 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true); // Для показа загрузки
   const navigate = useNavigate();
 
+  const loadTypesAndStatuses = async () => {
+    try {
+      const types = await api.get('/package-types');
+      setPkgTypes(types.data);
+
+      const statuses = await api.get('/package-statuses');
+      setPkgStatuses(statuses.data);
+    } catch(err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     // Проверяем токен при загрузке
     const checkAuth = async () => {
@@ -20,11 +32,7 @@ export function AuthProvider({ children }) {
           const response = await api.get('/users/me');
           setUser(response.data);
 
-          const types = await api.get('/package-types');
-          setPkgTypes(types.data);
-
-          const statuses = await api.get('/package-statuses');
-          setPkgStatuses(statuses.data);
+          await loadTypesAndStatuses();
         } catch (error) {
           localStorage.removeItem('token');
           setUser(null);
@@ -43,6 +51,8 @@ export function AuthProvider({ children }) {
 
       const userResponse = await api.get('/users/me');
       setUser(userResponse.data);
+
+      await loadTypesAndStatuses();
     } catch(err) {
       console.error(err);
     }
