@@ -54,6 +54,8 @@ function Navbar() {
     [() => navigate('/admin/package-statuses'), 'Статусы посылок'],
     [() => navigate('/admin/package-types'), 'Типы посылок'],
   );
+
+  if(user) settings.unshift([() => {}, `${user.first_name} ${user.last_name}`]);
   
   return (
     <AppBar position="static">
