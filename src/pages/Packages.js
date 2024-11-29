@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useContext } from 'react';
 import api from '../helpers/api';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from '../components/SnackbarProvider';
-import { Container, Typography, List, ListItem, ListItemText, Button, CircularProgress } from '@mui/material';
+import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, CircularProgress, Chip } from '@mui/material';
 import { AuthContext } from '../context/AuthContext';
 
 function Packages() {
@@ -27,7 +27,7 @@ function Packages() {
         navigate('/login');
         showSnackbar('Необходимо выполнить повторный вход', 'error');
       } else {
-        showSnackbar('Failed to fetch packages', 'error');
+        showSnackbar('Не удалось загрузить посылки', 'error');
       }
     } finally {
       setLoading(false);
@@ -46,6 +46,19 @@ function Packages() {
     );
   }
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 8:
+        return 'success';
+      case 4: case 3: case 5:
+        return 'warning';
+      case 7:
+        return 'error';
+      default:
+        return 'default';
+    }
+  };
+
   return (
     <Container maxWidth="md">
       <Typography variant="h4" gutterBottom>
@@ -54,17 +67,36 @@ function Packages() {
           Обновить
         </Button>
       </Typography>
-      <List>
-        {packages.map((pkg, i) => (
-          <ListItem key={i}>
-            <ListItemText
-              primary={`${formattedTypes[pkg.type_id]} (${pkg.tracking_number})`}
-              secondary={`${pkg.size_weight}кг`}
-            />
-            <Button onClick={() => navigate(`/tracking/${pkg.tracking_number}`)}>перейти</Button>
-          </ListItem>
-        ))}
-      </List>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Тип</TableCell>
+              <TableCell>Отправитель</TableCell>
+              <TableCell>Получатель</TableCell>
+              <TableCell>Вес</TableCell>
+              <TableCell>Статус</TableCell>
+              <TableCell>Действия</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {packages.map((pkg, i) => (
+              <TableRow key={i}>
+                <TableCell>{formattedTypes[pkg.type_id]}</TableCell>
+                <TableCell>{pkg.sender_name}</TableCell>
+                <TableCell>{pkg.receiver_name}</TableCell>
+                <TableCell>{pkg.size_weight} кг</TableCell>
+                <TableCell>
+                  <Chip label={pkg.last_status} color={getStatusColor(pkg.last_status_id)} />
+                </TableCell>
+                <TableCell>
+                  <Button onClick={() => navigate(`/tracking/${pkg.tracking_number}`)} variant="outlined">Отслеживание</Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Container>
   );
 }
