@@ -61,7 +61,7 @@ function Packages() {
               primary={`${formattedTypes[pkg.type_id]} (${pkg.tracking_number})`}
               secondary={`${pkg.size_weight}кг`}
             />
-            <Button onClick={() => navigate(`/status-history/${pkg.tracking_number}`)}>перейти</Button>
+            <Button onClick={() => navigate(`/tracking/${pkg.tracking_number}`)}>перейти</Button>
           </ListItem>
         ))}
       </List>

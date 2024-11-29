@@ -10,7 +10,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 
@@ -48,6 +47,13 @@ function Navbar() {
 
   if(user?.role === 'admin') pages.push(['/users', 'Пользователи'], ['/facilities', 'Склады']);
   if(user?.role === 'admin' || user?.role === 'soter') pages.push(['/status-history', 'Логистика']);
+
+  const settings = [[handleLogout, 'Выйти']];
+
+  if(user?.role === 'admin') settings.unshift(
+    [() => navigate('/admin/package-statuses'), 'Статусы посылок'],
+    [() => navigate('/admin/package-types'), 'Типы посылок'],
+  );
   
   return (
     <AppBar position="static">
@@ -137,11 +143,9 @@ function Navbar() {
             ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt={user.username} />
-              </IconButton>
-            </Tooltip>
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <Avatar alt={user.username} />
+            </IconButton>
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
@@ -158,9 +162,11 @@ function Navbar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem onClick={handleLogout}>
-                <Typography sx={{ textAlign: 'center' }}>Выйти</Typography>
-              </MenuItem>
+              {settings.map((setting, i) => (
+                <MenuItem key={i} onClick={setting[0]}>
+                  <Typography sx={{ textAlign: 'center' }}>{setting[1]}</Typography>
+                </MenuItem>
+              ))}
             </Menu>
           </Box>
         </Toolbar>

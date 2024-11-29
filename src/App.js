@@ -9,7 +9,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import RequireAuth from './components/RequireAuth';
 import Layout from './components/Layout';
-import PackageStatusAdd from './pages/Admin/PackageStatusAdd';
+import PackageStatuses from './pages/Admin/PackageStatuses';
+import PackageTypes from './pages/Admin/PackageTypes';
 
 function App() {
   return (
@@ -19,10 +20,11 @@ function App() {
       <Route element={<RequireAuth><Layout /></RequireAuth>}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/packages" element={<Packages />} />
-        <Route path="/status-history/:tracking_number" element={<PackageStatusHistory />} />
+        <Route path="/tracking/:tracking_number" element={<PackageStatusHistory />} />
       </Route>
       <Route element={<RequireAuth allowedRoles={['admin']}><Layout /></RequireAuth>}>
-        <Route path="/admin/packages/status/new" element={<PackageStatusAdd />} />
+        <Route path="/admin/package-statuses" element={<PackageStatuses />} />
+        <Route path="/admin/package-types" element={<PackageTypes />} />
       </Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
