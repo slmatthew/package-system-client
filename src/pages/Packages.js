@@ -66,6 +66,9 @@ function Packages() {
         <Button variant="text" onClick={fetchPackages}>
           Обновить
         </Button>
+        <Button variant="text" onClick={() => navigate('/packages/new')}>
+          Отправить
+        </Button>
       </Typography>
       <TableContainer component={Paper}>
         <Table>

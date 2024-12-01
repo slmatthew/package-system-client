@@ -12,6 +12,7 @@ import PackageStatuses from './pages/Admin/PackageStatuses';
 import PackageTypes from './pages/Admin/PackageTypes';
 import PackagesManage from './pages/Admin/PackagesManage';
 import UserManagementPage from './pages/Admin/UserManagement';
+import NewPackage from './pages/NewPackage';
 
 function App() {
   return (
@@ -22,11 +23,12 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/packages" element={<Packages />} />
         <Route path="/tracking/:tracking_number" element={<PackageStatusHistory />} />
+        <Route path="/packages/new" element={<NewPackage />} />
       </Route>
       <Route element={<RequireAuth allowedRoles={['admin', 'sorter']}><Layout /></RequireAuth>}>
         <Route path="/admin/packages" element={<PackagesManage />} />
       </Route>
-      <Route>
+      <Route element={<RequireAuth allowedRoles={['admin']}><Layout /></RequireAuth>}>
         <Route path="/admin/package-statuses" element={<PackageStatuses />} />
         <Route path="/admin/package-types" element={<PackageTypes />} />
         <Route path="/admin/users" element={<UserManagementPage />} />
