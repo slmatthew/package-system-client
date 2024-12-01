@@ -20,7 +20,7 @@ function PackagesManage() {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const searchInputRef = useRef(null); // useRef для управления фокусом
-  const { expiredToken } = useAuth();
+  const { expiredToken, user } = useAuth();
   const showSnackbar = useSnackbar();
 
   const filteredPackages = packages.filter(item => {
@@ -165,7 +165,9 @@ function PackagesManage() {
                 <TableCell>
                   <Button variant="outlined" onClick={() => handleViewStatuses(pkg)}>Статусы</Button>
                   <Button style={{ marginLeft: 5 }} variant="outlined" color="info" onClick={() => handleEditPackage(pkg)}>Изменить</Button>
-                  <Button style={{ marginLeft: 5 }} variant="outlined" color="error" onClick={() => handleDeletePackage(pkg)}>Удалить</Button>
+                  {user.role === 'admin' && (
+                    <Button style={{ marginLeft: 5 }} variant="outlined" color="error" onClick={() => handleDeletePackage(pkg)}>Удалить</Button>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
