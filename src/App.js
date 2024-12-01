@@ -13,6 +13,9 @@ import PackageTypes from './pages/Admin/PackageTypes';
 import PackagesManage from './pages/Admin/PackagesManage';
 import UserManagementPage from './pages/Admin/UserManagement';
 import NewPackage from './pages/NewPackage';
+import FacilitiesPage from './pages/Admin/FacilitiesPage';
+import EditFacilityPage from './pages/Admin/EditFacilityPage';
+import CreateFacilityPage from './pages/Admin/CreateFacilityPage';
 
 function App() {
   return (
@@ -27,11 +30,14 @@ function App() {
       </Route>
       <Route element={<RequireAuth allowedRoles={['admin', 'sorter']}><Layout /></RequireAuth>}>
         <Route path="/admin/packages" element={<PackagesManage />} />
+        <Route path="/admin/facilities" element={<FacilitiesPage />} />
       </Route>
       <Route element={<RequireAuth allowedRoles={['admin']}><Layout /></RequireAuth>}>
         <Route path="/admin/package-statuses" element={<PackageStatuses />} />
         <Route path="/admin/package-types" element={<PackageTypes />} />
         <Route path="/admin/users" element={<UserManagementPage />} />
+        <Route path="/admin/facilities/edit/:id" element={<EditFacilityPage />} />
+        <Route path="/admin/facilities/new" element={<CreateFacilityPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

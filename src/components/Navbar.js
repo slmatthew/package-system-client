@@ -45,8 +45,8 @@ function Navbar() {
 
   const pages = [['/', 'Главная'], ['/packages', 'Мои посылки']];
 
-  if(user?.role === 'admin') pages.push(['/admin/users', 'Пользователи'], ['/facilities', 'Склады']);
-  if(user?.role === 'admin' || user?.role === 'sorter') pages.push(['/admin/packages', 'Логистика']);
+  if(user?.role === 'admin') pages.push(['/admin/users', 'Пользователи']);
+  if(user?.role === 'admin' || user?.role === 'sorter') pages.push(['/admin/facilities', 'Склады'], ['/admin/packages', 'Логистика']);
 
   const settings = [[handleLogout, 'Выйти']];
 
