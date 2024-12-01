@@ -77,8 +77,13 @@ export function AuthProvider({ children }) {
     return false;
   };
 
+  const refreshUser = async () => {
+    const userResponse = await api.get('/users/me');
+    setUser(userResponse.data);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, expiredToken, loading, pkgStatuses, pkgTypes }}>
+    <AuthContext.Provider value={{ user, login, logout, expiredToken, refreshUser, loading, pkgStatuses, pkgTypes }}>
       {children}
     </AuthContext.Provider>
   );

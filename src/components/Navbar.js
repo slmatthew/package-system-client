@@ -43,7 +43,7 @@ function Navbar() {
     setAnchorElUser(null);
   };
 
-  const pages = [['/', 'Главная'], ['/packages', 'Мои посылки']];
+  const pages = [['/packages', 'Мои посылки']];
 
   if(user?.role === 'admin') pages.push(['/admin/users', 'Пользователи']);
   if(user?.role === 'admin' || user?.role === 'sorter') pages.push(['/admin/facilities', 'Склады'], ['/admin/packages', 'Логистика']);
@@ -55,7 +55,7 @@ function Navbar() {
     [() => navigate('/admin/package-types'), 'Типы посылок'],
   );
 
-  if(user) settings.unshift([() => {}, `${user.first_name} ${user.last_name}`]);
+  if(user) settings.unshift([() => navigate('/profile'), `${user.first_name} ${user.last_name}`]);
   
   return (
     <AppBar position="static">

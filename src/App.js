@@ -1,7 +1,5 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Dashboard from './pages/Dashboard';
-//import Facilities from './pages/Facilities';
 import Packages from './pages/Packages';
 import PackageStatusHistory from './pages/PackageStatusHistory';
 import Login from './pages/Login';
@@ -16,6 +14,7 @@ import NewPackage from './pages/NewPackage';
 import FacilitiesPage from './pages/Admin/FacilitiesPage';
 import EditFacilityPage from './pages/Admin/EditFacilityPage';
 import CreateFacilityPage from './pages/Admin/CreateFacilityPage';
+import UserProfilePage from './pages/UserProfilePage';
 
 function App() {
   return (
@@ -23,10 +22,10 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route element={<RequireAuth><Layout /></RequireAuth>}>
-        <Route path="/" element={<Dashboard />} />
         <Route path="/packages" element={<Packages />} />
         <Route path="/tracking/:tracking_number" element={<PackageStatusHistory />} />
         <Route path="/packages/new" element={<NewPackage />} />
+        <Route path="/profile" element={<UserProfilePage />} />
       </Route>
       <Route element={<RequireAuth allowedRoles={['admin', 'sorter']}><Layout /></RequireAuth>}>
         <Route path="/admin/packages" element={<PackagesManage />} />
@@ -39,7 +38,7 @@ function App() {
         <Route path="/admin/facilities/edit/:id" element={<EditFacilityPage />} />
         <Route path="/admin/facilities/new" element={<CreateFacilityPage />} />
       </Route>
-      <Route path="*" element={<Navigate to="/" />} />
+      <Route path="*" element={<Navigate to="/packages" />} />
     </Routes>
   );
 }
