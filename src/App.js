@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
-//import Users from './pages/Users';
+import Users from './pages/Admin/Users';
 //import Facilities from './pages/Facilities';
 import Packages from './pages/Packages';
 import PackageStatusHistory from './pages/PackageStatusHistory';
@@ -11,6 +11,8 @@ import RequireAuth from './components/RequireAuth';
 import Layout from './components/Layout';
 import PackageStatuses from './pages/Admin/PackageStatuses';
 import PackageTypes from './pages/Admin/PackageTypes';
+import PackagesManage from './pages/Admin/PackagesManage';
+import UserManagementPage from './pages/Admin/UserManagement';
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
       <Route element={<RequireAuth allowedRoles={['admin']}><Layout /></RequireAuth>}>
         <Route path="/admin/package-statuses" element={<PackageStatuses />} />
         <Route path="/admin/package-types" element={<PackageTypes />} />
+        <Route path="/admin/users" element={<UserManagementPage />} />
+        <Route path="/admin/packages" element={<PackagesManage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSnackbar } from '../components/SnackbarProvider';
 import api from '../helpers/api';
 
 export const AuthContext = createContext();
@@ -10,6 +11,7 @@ export function AuthProvider({ children }) {
   const [pkgStatuses, setPkgStatuses] = useState([]);
   const [loading, setLoading] = useState(true); // Для показа загрузки
   const navigate = useNavigate();
+  const showSnackbar = useSnackbar();
 
   const loadTypesAndStatuses = async () => {
     try {
@@ -64,8 +66,18 @@ export function AuthProvider({ children }) {
     navigate('/login');
   };
 
+  const expiredToken = (error) => {
+    if(error.status === 401) {
+      showSnackbar('Необходимо выполнить повторный вход', 'error');
+      logout();
+      return true;
+    }
+    
+    return false;
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading, pkgStatuses, pkgTypes }}>
+    <AuthContext.Provider value={{ user, login, logout, expiredToken, loading, pkgStatuses, pkgTypes }}>
       {children}
     </AuthContext.Provider>
   );
