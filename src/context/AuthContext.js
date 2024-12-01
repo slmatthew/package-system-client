@@ -57,6 +57,7 @@ export function AuthProvider({ children }) {
       await loadTypesAndStatuses();
     } catch(err) {
       console.error(err);
+      throw err;
     }
   };
 
