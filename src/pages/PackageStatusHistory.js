@@ -30,7 +30,7 @@ const PackageStatusHistory = () => {
   }
 
   if (statusHistory.length === 0) {
-    return <Typography>No status history available for this package.</Typography>;
+    return <Typography>Для этого отправления не зафиксировано ни одного изменения статуса</Typography>;
   }
 
   console.log(statusHistory)
@@ -43,14 +43,16 @@ const PackageStatusHistory = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Status</TableCell>
-            <TableCell>Date</TableCell>
+            <TableCell>Статус</TableCell>
+            <TableCell>Местоположене</TableCell>
+            <TableCell>Дата</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {statusHistory.map((status) => (
             <TableRow key={status.id}>
               <TableCell>{status.status_value}</TableCell>
+              <TableCell>{`${status.facility_name} (${status.facility_address})`}</TableCell>
               <TableCell>{new Date(status.recorded_at).toLocaleString()}</TableCell>
             </TableRow>
           ))}
