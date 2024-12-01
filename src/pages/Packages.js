@@ -1,21 +1,16 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import api from '../helpers/api';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from '../components/SnackbarProvider';
-import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, CircularProgress, Chip } from '@mui/material';
-import { AuthContext } from '../context/AuthContext';
+import { TextField, Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, CircularProgress, Chip } from '@mui/material';
 
 function Packages() {
-  const { pkgTypes } = useContext(AuthContext);
   const [packages, setPackages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+
   const showSnackbar = useSnackbar();
   const navigate = useNavigate();
-
-  const formattedTypes = pkgTypes.reduce((acc, item) => {
-    acc[item.id] = item.value;
-    return acc;
-  }, {});
 
   const fetchPackages = useCallback(async () => {
     setLoading(true);
@@ -34,18 +29,6 @@ function Packages() {
     }
   }, [showSnackbar, navigate]);
 
-  useEffect(() => {
-    fetchPackages();
-  }, [fetchPackages]);
-
-  if (loading) {
-    return (
-      <Container maxWidth="md" style={{ textAlign: 'center', marginTop: '20px' }}>
-        <CircularProgress />
-      </Container>
-    );
-  }
-
   const getStatusColor = (status) => {
     switch (status) {
       case 8:
@@ -59,6 +42,28 @@ function Packages() {
     }
   };
 
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value.toLowerCase());
+  };
+
+  // Фильтрация пользователей
+  const filteredPackages = packages.filter((item) =>
+    [item.tracking_number, item.sender_name, item.receiver_name, item.package_type]
+      .some((field) => field.toLowerCase().includes(searchTerm))
+  );
+
+  useEffect(() => {
+    fetchPackages();
+  }, [fetchPackages]);
+
+  if (loading) {
+    return (
+      <Container maxWidth="md" style={{ textAlign: 'center', marginTop: '20px' }}>
+        <CircularProgress />
+      </Container>
+    );
+  }
+
   return (
     <Container maxWidth="md">
       <Typography variant="h4" gutterBottom>
@@ -70,10 +75,17 @@ function Packages() {
           Отправить
         </Button>
       </Typography>
-      <TableContainer component={Paper}>
+      <TextField
+          label="Поиск"
+          variant="outlined"
+          onChange={handleSearchChange}
+          fullWidth
+      />
+      <TableContainer style={{ marginTop: 15 }} component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>Трек-номер</TableCell>
               <TableCell>Тип</TableCell>
               <TableCell>Отправитель</TableCell>
               <TableCell>Получатель</TableCell>
@@ -83,9 +95,10 @@ function Packages() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {packages.map((pkg, i) => (
+            {filteredPackages.map((pkg, i) => (
               <TableRow key={i}>
-                <TableCell>{formattedTypes[pkg.type_id]}</TableCell>
+                <TableCell>{pkg.tracking_number}</TableCell>
+                <TableCell>{pkg.package_type}</TableCell>
                 <TableCell>{pkg.sender_name}</TableCell>
                 <TableCell>{pkg.receiver_name}</TableCell>
                 <TableCell>{pkg.size_weight} кг</TableCell>
