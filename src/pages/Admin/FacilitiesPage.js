@@ -57,18 +57,16 @@ const FacilitiesPage = () => {
                 Список складов
             </Typography>
             {user.role === 'admin' && (
-                <>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => navigate('/admin/facilities/new')} // Переход к форме создания нового склада
-                        style={{ marginRight: '10px' }}
-                    >
-                        Добавить склад
-                    </Button>
-                    <Exporter tableName="facilities" />
-                </>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate('/admin/facilities/new')} // Переход к форме создания нового склада
+                    style={{ marginRight: '10px' }}
+                >
+                    Добавить склад
+                </Button>
             )}
+            <Exporter tableName="facilities" />
 
             <TableContainer style={{ marginTop: '20px' }} component={Paper}>
                 <Table>
