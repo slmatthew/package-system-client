@@ -20,6 +20,7 @@ import {
   Box,
 } from '@mui/material';
 import { Delete, Edit, Refresh, Search, Password } from '@mui/icons-material';
+import Exporter from '../../components/Exporter';
 import { useSnackbar } from '../../components/SnackbarProvider';
 import api from '../../helpers/api';
 
@@ -165,9 +166,11 @@ const UserManagementPage = () => {
           color="primary"
           startIcon={<Refresh />}
           onClick={fetchUsers}
+          style={{ marginRight: 10 }}
         >
           Обновить список
         </Button>
+        <Exporter tableName="users" />
       </Box>
 
       <TableContainer component={Paper}>

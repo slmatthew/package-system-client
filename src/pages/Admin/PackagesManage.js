@@ -3,6 +3,7 @@ import { Container, Typography, TextField, Button, Select, MenuItem, Table, Tabl
 import StatusesDialog from '../../components/PackagesManage/StatusesDialog';
 import DeletePackageDialog from '../../components/PackagesManage/DeletePackageDialog';
 import EditPackageDialog from '../../components/PackagesManage/EditPackageDialog';
+import Exporter from '../../components/Exporter';
 import { useSnackbar } from '../../components/SnackbarProvider';
 import api from '../../helpers/api';
 import { useAuth } from '../../context/AuthContext';
@@ -139,6 +140,7 @@ function PackagesManage() {
           ))}
         </Select>
         <Button variant="contained" onClick={fetchPackages}>Обновить</Button>
+        <Exporter tableName="packages" />
       </div>
 
       {/* Таблица с посылками */}

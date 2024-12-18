@@ -15,6 +15,7 @@ import {
     DialogActions,
     CircularProgress,
 } from '@mui/material';
+import Exporter from '../../components/Exporter';
 import api from '../../helpers/api';
 
 function PackageTypes() {
@@ -109,6 +110,7 @@ function PackageTypes() {
                     Добавить
                 </Button>
             </form>
+            <Exporter tableName="package_types" />
             {loading ? (
                 <CircularProgress style={{ marginTop: '20px' }} />
             ) : (

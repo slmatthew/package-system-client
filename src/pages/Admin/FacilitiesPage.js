@@ -4,6 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import Exporter from '../../components/Exporter';
 import api from '../../helpers/api';
 
 const FacilitiesPage = () => {
@@ -56,17 +57,20 @@ const FacilitiesPage = () => {
                 Список складов
             </Typography>
             {user.role === 'admin' && (
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => navigate('/admin/facilities/new')} // Переход к форме создания нового склада
-                    style={{ marginBottom: '20px' }}
-                >
-                    Добавить склад
-                </Button>
+                <>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => navigate('/admin/facilities/new')} // Переход к форме создания нового склада
+                        style={{ marginRight: '10px' }}
+                    >
+                        Добавить склад
+                    </Button>
+                    <Exporter tableName="facilities" />
+                </>
             )}
 
-            <TableContainer component={Paper}>
+            <TableContainer style={{ marginTop: '20px' }} component={Paper}>
                 <Table>
                     <TableHead>
                         <TableRow>
